@@ -33,4 +33,5 @@ enter the name of your database in 'NAME' field; username, password to connect t
 left empty.
 
 Finally, delete the following line from settings.py:
+
 from .secret_settings import *
