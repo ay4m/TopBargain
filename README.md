@@ -1,4 +1,6 @@
-Requirements: restframework => pip install djangorestframework
+Requirements
+              
+              restframework => pip install djangorestframework
               
               postgresql => https://www.postgresql.org/download/
               
