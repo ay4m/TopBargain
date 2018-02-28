@@ -1,5 +1,4 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render
 from rest_framework import status, views, permissions
 from rest_framework.response import Response
 import json
@@ -7,8 +6,6 @@ import json
 from accounts.models import UserAccount
 from accounts.serializers import AccountSerializer
 
-def default(request):
-  return render(request, 'TopBargain\index.html')
 
 class LoginView(views.APIView):
     def post(self, request):
