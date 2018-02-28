@@ -1,5 +1,7 @@
 Requirements: restframework => pip install djangorestframework
+              
               postgresql => https://www.postgresql.org/download/
+              
               psycopg2 => pip install psycopg2
 
 After cloning the repo, a few edits in the settings.py file are needed to make the app work.
