@@ -9,7 +9,7 @@ Requirements
 After cloning the repo, a few edits in the settings.py file are needed to make the app work.
 
 First, the SECRET_KEY variable has been commented out. You will need a secret key to make the app work. Create a dummy Django project
-(can be named anything; we're only doing this to get a secret key. For this example, I will use the name used in the Django documentations - mysite):
+(can be named anything; we're only doing this to get a secret key. For this example, I will use the name used in the Django documentations - "mysite"):
 https://docs.djangoproject.com/en/2.0/intro/tutorial01/
 
 from mysite/mysite/settings.py, copy the SECRET_KEY value and save it in the settings.py file from this repo. Also uncomment the SECRET_KEY line.
