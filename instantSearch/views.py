@@ -1,6 +1,5 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-import json
 
 from posts.models import PostModel
 
@@ -9,7 +8,7 @@ def instant_search(request, query):
 	instant_search_list = {'instantSearchList':[]}
 	#dictionary containing list of query hits to be sent as response
 
-	objects = PostModel.objects.filter(product_name__icontains=query)
+	objects = PostModel.objects.filter(productName__icontains=query)
 	#query the database for product names which contain the string in query
 
 	[instant_search_list['instantSearchList'].append(str(object)) for object in objects]

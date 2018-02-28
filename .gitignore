@@ -1,1 +1,4 @@
-settings.py
+secret_settings.py
+*.pyo
+*.pyc
+migrations/

@@ -17,11 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 
 from TopBargain.views import homepage
-from instantSearch.views import instant_search
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', homepage),
     path('account/', include('accounts.urls') ),
-    path('instantSearch/<slug:query>/', instant_search),
+    path('instantSearch/', include('instantSearch.urls')),
+    path('search/', include('search.urls')),
+    path('post/', include('posts.urls')),
 ]

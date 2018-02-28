@@ -9,9 +9,7 @@ from accounts.serializers import AccountSerializer
 
 class LoginView(views.APIView):
     def post(self, request):
-        """
-        This function is called when the HTTP request method is POST for the url /api/login/
-        """
+
         data = json.loads(request.body)
         #loads json data from the request and converts to python dictionary
 
@@ -32,7 +30,7 @@ class LoginView(views.APIView):
             #if the given account is valid, then the user is logged in
 
             serialized = AccountSerializer(account)
-            #converts UserAccount instance to JSON
+            #converts UserAccount instance to python dict
 
             return Response({
                 'loggedIn': "yes",
