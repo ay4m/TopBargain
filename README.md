@@ -15,17 +15,30 @@ https://docs.djangoproject.com/en/2.0/intro/tutorial01/
 from mysite/mysite/settings.py, copy the SECRET_KEY value and save it in the settings.py file from this repo. Also uncomment the SECRET_KEY line.
 
 then, uncomment the following section in the same file:
+
+
 """
+
 DATABASES = {
+
     'default': {
+    
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        
         'NAME': '',
+        
         'USER': '',
+        
         'PASSWORD': '',
+        
         'HOST': '',
+        
         'PORT': '1234',
+        
     }
+    
 }
+
 """
 
 After setting up postgresql ( https://www.techrepublic.com/blog/diy-it-guy/diy-a-postgresql-database-server-setup-anyone-can-handle/ ),
