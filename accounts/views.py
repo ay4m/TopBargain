@@ -7,10 +7,12 @@ from accounts.models import UserAccount
 from accounts.serializers import AccountSerializer
 
 
+
 class LoginView(views.APIView):
     def post(self, request):
 
         data = json.loads(request.body)
+        print(data)
         #loads json data from the request and converts to python dictionary
 
         username = data.get('username', None)
@@ -40,8 +42,7 @@ class LoginView(views.APIView):
         
         else:
             return Response({
-                'status': 'Unauthorized',
-                'message': 'Username/password combination invalid.'
+                'message': "Username/password combination invalid."
             }, status=status.HTTP_401_UNAUTHORIZED)
 
 

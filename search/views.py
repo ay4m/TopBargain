@@ -17,7 +17,7 @@ def search_view(request, query):
 		for q in query_set:
 			serialized = PostSerializer(q)
 			serialized = dict(serialized.data)
-			serialized['price'] = int(float(serialized['price']))
+			serialized['price'] = serialized['price']
 			total_price += serialized['price']
 			search_list['list'].append(serialized)
 
