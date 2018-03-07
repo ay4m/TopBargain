@@ -6,11 +6,12 @@ from search.serializers import PostSerializer
 
 @api_view(['GET'])
 def search_view(request, query):
+	query = query.replace('-', ' ')
 	search_list = {'recommendedPrice': 0, 'list': []}
 	final_list = {}
 
 	if query is not None:
-		query_set = PostModel.objects.filter(productName__contains=query)
+		query_set = PostModel.objects.filter(productName__icontains=query)
 
 		total_price = 0
 
@@ -21,7 +22,9 @@ def search_view(request, query):
 			total_price += serialized['price']
 			search_list['list'].append(serialized)
 
-		search_list['recommendedPrice'] = int(total_price / len(query_set))
+		if(len(query_set) > 0):
+			search_list['recommendedPrice'] = int(total_price / len(query_set))
+
 		final_list['searchResults'] = search_list
 
 	return Response(final_list)

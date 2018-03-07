@@ -5,6 +5,8 @@ from posts.models import PostModel
 
 @api_view(['GET'])
 def instant_search(request, query):
+	query = query.replace('-', ' ')
+
 	instant_search_list = {'instantSearchList':[]}
 	#dictionary containing list of query hits to be sent as response
 

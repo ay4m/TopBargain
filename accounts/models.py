@@ -32,7 +32,7 @@ class UserAccount(AbstractBaseUser):
 	username = models.CharField(max_length=40, unique=True, primary_key=True)
 	first_name = models.CharField(max_length=40, blank=True)
 	last_name = models.CharField(max_length=40, blank=True)
-	profile_image = models.ImageField(upload_to='profiles/images/',max_length=140, blank=True)
+	profile_image = models.ImageField(upload_to='TopBargain/static/profiles/images/',max_length=140, blank=True)
 
 	is_admin = models.BooleanField(default=False)
 	is_staff = models.BooleanField(default=False)

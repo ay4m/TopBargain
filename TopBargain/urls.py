@@ -17,12 +17,14 @@ from django.contrib import admin
 from django.urls import path, include
 
 from TopBargain.views import homepage
+from accounts.views import LoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', homepage),
-    path('account/', include('accounts.urls') ),
+    path('accounts/', include('accounts.urls') ),
     path('instantSearch/', include('instantSearch.urls')),
     path('search/', include('search.urls')),
     path('post/', include('posts.urls')),
+    path('isCredentialsComing/', LoginView.as_view()),
 ]

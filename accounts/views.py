@@ -1,49 +1,20 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import status, views, permissions
 from rest_framework.response import Response
-import json
+from rest_framework.authtoken.views import obtain_auth_token
 
 from accounts.models import UserAccount
 from accounts.serializers import AccountSerializer
 
-
-
 class LoginView(views.APIView):
     def post(self, request):
-
+        print(request.user)
         data = json.loads(request.body)
         print(data)
-        #loads json data from the request and converts to python dictionary
-
-        username = data.get('username', None)
-        password = data.get('password', None)
-
-        print(username+' '+password)
-        account = authenticate(username=username, password=password)
-        print(account)
-        """
-        username and password are extracted from the json data and authenticated from the database
-        if matched, an instance of UserAccount for the user is returned
-        else HTTP_401_UNAUTHORIZED method is run
-        """
-        if account is not None:
-
-            login(request, account)
-            #if the given account is valid, then the user is logged in
-
-            serialized = AccountSerializer(account)
-            #converts UserAccount instance to python dict
-
-            return Response({
-                'loggedIn': "yes",
-              },status=status.HTTP_202_ACCEPTED)
-            #return Response(serialized.data)
-            #returns JSON data
-        
-        else:
-            return Response({
-                'message': "Username/password combination invalid."
-            }, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({
+            'message': 'Account could not be created with received data.'
+        }, status = status.HTTP_400_BAD_REQUEST)
 
 
 class RegisterView(views.APIView):
@@ -58,7 +29,6 @@ class RegisterView(views.APIView):
             return Response(serialized.validated_data, status=status.HTTP_201_CREATED)
 
         return Response({
-            'status': 'Bad request',
             'message': 'Account could not be created with received data.'
         }, status=status.HTTP_400_BAD_REQUEST)
 

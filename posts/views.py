@@ -1,18 +1,22 @@
-import json
-import rest_framework
+import json, rest_framework
 from rest_framework.response import Response
-from rest_framework import views
+from rest_framework import views, permissions, status
 from django.core.files.storage import FileSystemStorage
+from os.path import splitext
 
 from posts.models import PostModel
 from accounts.models import UserAccount
 from posts.serializers import PostSerializer
 
+WHITELIST = ['jpg', 'bmp', 'png', 'gif', 'tiff']
+
 class PostView(views.APIView):
+	permission_classes = (permissions.IsAuthenticated,)
+
 	def post(self, request):
 		image = request.FILES['productImage']
 
-		success = ''
+		err_msg = ''
 
 		data = dict(request.POST)
 
@@ -23,19 +27,32 @@ class PostView(views.APIView):
 		data['price'] = int(data['price'][0])
 		data['location'] = data['location'][0]
 
-		image.name = username + '_' + data['productName']
-
 		serialized = PostSerializer(data=data)
-		user = UserAccount.objects.get(username=username)
 
-		if serialized.is_valid() and user_info is not None:
-			post = PostModel(username=user, **serialized.data)
-			#username is a foreignkey field. so instance is sent
-			post.save()
-			success = 'yes'
-		else:
-			success = 'no'
+		user_instance = UserAccount.objects.get(username=username)
 
+		if image is not None:
+			ext = splitext(image.name)[1]
+			ext = ext.lower()
+			if ext not in WHITELIST:
+				err_msg += 'invalid image format; '
+
+			image.name = str(username) + '_' + data['productName'] + ext
+
+		if not serialized.is_valid():
+			err_msg += 'invalid input.'
+
+		if len(err_msg) > 0:
+			return Response({
+				'success': 'no',
+				'message': 'Post not successful; ' + err_msg
+			}, status = status.HTTP_406_NOT_ACCEPTABLE)
+
+		post = PostModel(username=user_instance, **serialized.data)
+		#username is a foreignkey field. so instance is sent
+		post.image = image			
+		post.save()
 		return Response({
-			'success': success
+			'success': 'yes',
+			'message': 'Post successful'
 		})
