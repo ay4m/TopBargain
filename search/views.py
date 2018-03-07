@@ -18,8 +18,13 @@ def search_view(request, query):
 		for q in query_set:
 			serialized = PostSerializer(q)
 			serialized = dict(serialized.data)
-			serialized['price'] = serialized['price']
 			total_price += serialized['price']
+
+			if str(q.image) is not '':
+				path = str(q.image).split('TopBargain/')[1]
+				serialized['image'] = path
+				print(path)
+
 			search_list['list'].append(serialized)
 
 		if(len(query_set) > 0):

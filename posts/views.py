@@ -2,7 +2,6 @@ import json, rest_framework
 from rest_framework.response import Response
 from rest_framework import views, permissions, status
 from django.core.files.storage import FileSystemStorage
-from os.path import splitext
 
 from posts.models import PostModel
 from accounts.models import UserAccount
@@ -32,12 +31,12 @@ class PostView(views.APIView):
 		user_instance = UserAccount.objects.get(username=username)
 
 		if image is not None:
-			ext = splitext(image.name)[1]
+			ext = image.name.split('.')[1]
 			ext = ext.lower()
 			if ext not in WHITELIST:
 				err_msg += 'invalid image format; '
 
-			image.name = str(username) + '_' + data['productName'] + ext
+			image.name = str(username) + '_' + data['productName'] + '.' + ext   # username_productname.jpg
 
 		if not serialized.is_valid():
 			err_msg += 'invalid input.'
