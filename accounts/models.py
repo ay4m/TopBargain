@@ -33,8 +33,8 @@ class UserAccount(AbstractBaseUser):
 	first_name = models.CharField(max_length=40, blank=True)
 	last_name = models.CharField(max_length=40, blank=True)
 	birthDate = models.DateField(blank=True, null=True)
-	profile_image = models.ImageField(upload_to='TopBargain/static/profiles/images/',max_length=140, blank=True, 
-									default='TopBargain/static/default/no_product_image.png')
+	profile_image = models.ImageField(upload_to='TopBargain/static/profiles/images/',max_length=140, 
+									default='TopBargain/static/default/no_profile_image.png')
 
 	is_admin = models.BooleanField(default=False)
 	is_staff = models.BooleanField(default=False)

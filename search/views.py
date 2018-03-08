@@ -19,9 +19,7 @@ def search_view(request, query):
 			serialized = PostSerializer(q)
 			serialized = dict(serialized.data)
 			total_price += serialized['price']
-
-			print(serialized)
-			
+						
 			try:
 				path = serialized['image'].split('TopBargain/')[1]
 			except:

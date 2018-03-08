@@ -11,18 +11,21 @@ from .serializers import PostSerializer
 WHITELIST = ['jpg', 'bmp', 'png', 'gif', 'tiff']
 
 class PostView(views.APIView):
-	#permission_classes = (permissions.IsAuthenticated,)
+	permission_classes = (permissions.IsAuthenticated,)
 
 	def post(self, request):
 
-		image = request.FILES['productImage']
+		try:
+			image = request.FILES['productImage']
+		except:
+			image = None
 
 		err_msg = ''
 
 		data = dict(request.POST)
 
 		user = request.user
-		
+
 		data['productName'] = data['productName'][0]
 		data['price'] = int(data['price'][0])
 		data['location'] = data['location'][0]
@@ -54,7 +57,9 @@ class PostView(views.APIView):
 
 		post = PostModel(username=user, **serialized.data)
 		#username is a foreignkey field. so instance is sent
-		post.image = image			
+		if image is not None:
+			post.image = image			
+		
 		post.save()
 
 

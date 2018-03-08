@@ -9,7 +9,7 @@ class PostModel(models.Model):
 	postDate = models.DateTimeField(auto_now_add=True)
 	location = models.CharField(max_length=100)
 	image = models.ImageField(upload_to='TopBargain/static/products/images/', max_length=200,
-								default='TopBargain/static/default/no_profile_image.png')
+								default='TopBargain/static/default/no_product_image.png')
 
 	def __str__(self):
 		return self.productName

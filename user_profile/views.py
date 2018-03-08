@@ -2,6 +2,7 @@ import json
 from rest_framework import status, views, permissions
 from rest_framework.response import Response
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.models import AnonymousUser
 #update_session_auth_hash(self.context.get('request'), instance)#account
 
 from accounts.serializers import AccountSerializer
@@ -21,19 +22,33 @@ class ProfileView(views.APIView):
 
 		return (permissions.IsAuthenticated(), IsAccountOwner())
 
-	def get(self, request, user):
-		user = user.replace('-', ' ')
+	def get(self, request, user=None):
+		if request.user.username == user:
+			user = None
+		
+		self_profile = False
 
-		try:
-			account = UserAccount.objects.get(username=user)
-		except:
-			return Response({
+		if user is not None:
+			user = user.replace('-', ' ')
+
+			try:
+				account = UserAccount.objects.get(username=user)
+				self_profile = False
+			except:
+				return Response({
 					'message': 'Username ' + user + ' does not exist.',
 				}, status=status.HTTP_404_NOT_FOUND)
+		else:
+			account = request.user
+			self_profile = True
+			if isinstance(account, AnonymousUser):
+				return Response({
+					'success': 'no',
+					'message': 'User unauthorized to make the request.'
+				}, status=status.HTTP_403_FORBIDDEN)
 
 		serialized = AccountSerializer(account)
-
-		serialized = dict(serialized.data)
+		serialized = dict(serialized.data)  #no need to validate as it is surely a UserAccount instance
 		
 		try:
 			path = serialized['profile_image'].split('TopBargain/')[1]
@@ -45,13 +60,12 @@ class ProfileView(views.APIView):
 
 		print(request.user.username)
 
-		if request.user.username == user:
+		if self_profile:
 			serialized['isSelfProfile'] = True
 		else:
 			serialized['isSelfProfile'] = False
 
 		serialized['posts'] = []
-
 		posts = PostModel.objects.filter(username=account).order_by('-postDate')
 
 		for post in posts:
@@ -59,9 +73,9 @@ class ProfileView(views.APIView):
 			serialized_post = dict(serialized_post.data)
 			
 			try:
-				serialized_post['image'] = serialized_post['image'].split('TopBargain/')[1]
+				serialized_post['image'] = serialized_post['image'].split('TopBargain/')[1] #to get the static URL
 			except:
-				serialized_post['image'] = ''
+				serialized_post['image'] = None
 
 			serialized['posts'].append(serialized_post)
 
@@ -124,9 +138,8 @@ class ProfileView(views.APIView):
 				changed_val = 'Email'
 
 		if 'password' in profileData and profileData['password'][0] is not '':
-			if :
-				account.set_password(password)
-				changed_val = 'Password'
+			account.set_password(password)
+			changed_val = 'Password'
 
 		account.save()
 
