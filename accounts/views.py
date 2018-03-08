@@ -18,16 +18,15 @@ class LoginView(views.APIView):
 
 
 class RegisterView(views.APIView):
-    queryset = UserAccount.objects.all()
     def post(self, request):
         data = json.loads(request.body)
         #load JSON data from request and convert to python dict
-        serialized = AccountSerializer(data=data)
+        """serialized = AccountSerializer(data=data)
 
         if serialized.is_valid():
             UserAccount.objects.create_user(**serialized.validated_data)
-            return Response(serialized.validated_data, status=status.HTTP_201_CREATED)
-
+            return Response(serialized.validated_data, status=status.HTTP_201_CREATED)"""
+        print(data)
         return Response({
             'message': 'Account could not be created with received data.'
         }, status=status.HTTP_400_BAD_REQUEST)

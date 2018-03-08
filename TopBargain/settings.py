@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'posts',
     'instantSearch',
     'search',
+    'user_profile',
     'rest_framework.authtoken',
 ]
 

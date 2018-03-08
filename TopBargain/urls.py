@@ -26,5 +26,5 @@ urlpatterns = [
     path('instantSearch/', include('instantSearch.urls')),
     path('search/', include('search.urls')),
     path('post/', include('posts.urls')),
-    path('isCredentialsComing/', LoginView.as_view()),
+    path('profile/', include('user_profile.urls')),
 ]

@@ -20,10 +20,15 @@ def search_view(request, query):
 			serialized = dict(serialized.data)
 			total_price += serialized['price']
 
-			if str(q.image) is not '':
-				path = str(q.image).split('TopBargain/')[1]
-				serialized['image'] = path
-				print(path)
+			print(serialized)
+			
+			try:
+				path = serialized['image'].split('TopBargain/')[1]
+			except:
+				path = ''
+
+			#print(path)
+			serialized['image'] = path
 
 			search_list['list'].append(serialized)
 
