@@ -1,8 +1,7 @@
 import json
-from django.contrib.auth import authenticate, login, logout
 from rest_framework import status, views, permissions
 from rest_framework.response import Response
-from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework.authtoken.views import ObtainAuthToken
 
 from accounts.models import UserAccount
 from accounts.serializers import AccountSerializer
@@ -24,12 +23,15 @@ class RegisterView(views.APIView):
         data = json.loads(request.body)
         #load JSON data from request and convert to python dict
         serialized = AccountSerializer(data=data)
+        print(request.data)
 
         if serialized.is_valid():
-            print(serialized.validated_data)
-            #UserAccount.objects.create_user(**serialized.validated_data)
-            #return Response(serialized.validated_data, status=status.HTTP_201_CREATED)
-        print(data)
+            UserAccount.objects.create_user(**serialized.validated_data)
+            return Response({
+                'isRegistered': 'yes',
+                'message': 'Registration Successful.'
+            })
+
         return Response({
             'message': 'Account could not be created with received data.'
         }, status=status.HTTP_400_BAD_REQUEST)

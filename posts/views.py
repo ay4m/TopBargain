@@ -8,7 +8,7 @@ from .models import PostModel
 from accounts.models import UserAccount
 from .serializers import PostSerializer
 
-WHITELIST = ['jpg', 'bmp', 'png', 'gif', 'tiff']
+WHITELIST = ['jpeg','jpg', 'bmp', 'png', 'gif', 'tiff']
 
 class PostView(views.APIView):
 	permission_classes = (permissions.IsAuthenticated,)
@@ -33,8 +33,6 @@ class PostView(views.APIView):
 		serialized = PostSerializer(data=data)
 
 		if image is not None:
-			image = image[0]
-
 			try:
 				ext = image.name.split('.')[1]
 			except:

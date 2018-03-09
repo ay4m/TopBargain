@@ -12,7 +12,7 @@ from posts.models import PostModel
 from search.serializers import PostSerializer
 from TopBargain.io import delete_profile_image, save_profile_image
 
-WHITELIST = ['jpg', 'bmp', 'png', 'gif', 'tiff']
+WHITELIST = ['jpeg', 'jpg', 'bmp', 'png', 'gif', 'tiff']
 
 class ProfileView(views.APIView):
 
@@ -20,7 +20,7 @@ class ProfileView(views.APIView):
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
 
-		return (permissions.IsAuthenticated(), IsAccountOwner())
+		return (permissions.IsAuthenticated(),)
 
 	def get(self, request, user=None):
 		if request.user.username == user:
@@ -55,7 +55,7 @@ class ProfileView(views.APIView):
 		except:
 			path = ''
 
-		serialized['image'] = path			
+		serialized['profilePic'] = path			
 		serialized.pop('profile_image')
 
 		print(request.user.username)
@@ -81,21 +81,19 @@ class ProfileView(views.APIView):
 
 		return Response(serialized)
 
-	def post(self, request, username):
+	def post(self, request, username=None):
 		account = request.user
 
-		if account.username != username:
-			return Response({
-				'success': 'no',
-				'message': 'User unauthorized to make the request.'
-			}, status=HTTP_403_FORBIDDEN)
+		profileData = dict(request.POST)
 
-		profileData = request.POST
-		image = request.FILES['image']
-		print(image) ##############################-> object or array of object?
 
+		try:
+			image = request.FILES['profilePic']
+		except:
+			image=None
+		
 		if image is not None:
-			image = image[0] ################## Also _^
+			#image = image[0] ################## Also _^
 			ext = image.name.split('.')[1]
 			ext = ext.lower()
 			
@@ -105,15 +103,14 @@ class ProfileView(views.APIView):
 					'message': 'Request not successful. Invalid image format.'
 				}, status = status.HTTP_406_NOT_ACCEPTABLE)
 			
-			if account.profile_image is not None:
+			if str(account.profile_image) is not '':
 				delete_profile_image(account)
 
 			image.name = account.username + '.' + ext
 			save_profile_image(account, image)
 
 			return Response({
-				'success': 'yes',
-				'message': 'Profile picture successfully changed.'
+				'profilePic': str(account.profile_image).split('TopBargain/')[1],
 			})
 		
 		changed_val = ''
@@ -142,6 +139,7 @@ class ProfileView(views.APIView):
 			changed_val = 'Password'
 
 		account.save()
+		print(account)
 
 		return Response({
 				'success': 'yes',
